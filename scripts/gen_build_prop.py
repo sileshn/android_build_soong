@@ -213,10 +213,10 @@ def generate_build_info(args):
 
   # ro.build.display.id is shown under Settings -> About Phone
   if config["BuildVariant"] == "user":
-    print(f"ro.build.display.id?={config['BuildId']} {config['BuildKeys']}")
+    print(f"ro.build.display.id?={config['BuildId']}")
   else:
     # Non-user builds should show detailed build information (See build desc above)
-    print(f"ro.build.display.id?={config['BuildId']} {config['BuildKeys']}")
+    print(f"ro.build.display.id?={config['BuildId']}")
   print(f"ro.build.version.incremental={config['BuildNumber']}")
   print(f"ro.build.version.sdk={config['Platform_sdk_version']}")
   print(f"ro.build.version.preview_sdk={config['Platform_preview_sdk_version']}")
