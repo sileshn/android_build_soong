@@ -110,6 +110,7 @@ func (lto *lto) flags(ctx BaseModuleContext, flags Flags) Flags {
 	}
 	if lto.Properties.LtoEnabled {
 		ltoCFlags := []string{"-flto=thin", "-fsplit-lto-unit"}
+		var ltoCOnlyFlags []string
 		var ltoLdFlags []string
 
 		// The module did not explicitly turn on LTO. Only leverage LTO's
@@ -124,6 +125,20 @@ func (lto *lto) flags(ctx BaseModuleContext, flags Flags) Flags {
 		    ltoCFlags = append(ltoCFlags, "-O3")
 		    ltoLdFlags = append(ltoLdFlags,"-Wl,--lto-O3")
 		}
+
+		// Enable Polly globally
+		ltoCOnlyFlags = append(ltoCOnlyFlags, "-mllvm -polly")
+		ltoCOnlyFlags = append(ltoCOnlyFlags, "-mllvm -polly-parallel")
+		ltoCOnlyFlags = append(ltoCOnlyFlags, "-mllvm -polly-ast-use-context")
+		ltoCOnlyFlags = append(ltoCOnlyFlags, "-mllvm -polly-invariant-load-hoisting")
+		ltoCOnlyFlags = append(ltoCOnlyFlags, "-mllvm -polly-run-inliner")
+		ltoCOnlyFlags = append(ltoCOnlyFlags, "-mllvm -polly-loopfusion-greedy=1")
+		ltoCOnlyFlags = append(ltoCOnlyFlags, "-mllvm -polly-reschedule=1")
+		ltoCOnlyFlags = append(ltoCOnlyFlags, "-mllvm -polly-postopts=1")
+		ltoCOnlyFlags = append(ltoCOnlyFlags, "-mllvm -polly-omp-backend=LLVM")
+		ltoCOnlyFlags = append(ltoCOnlyFlags, "-mllvm -polly-scheduling=dynamic")
+		ltoCOnlyFlags = append(ltoCOnlyFlags, "-mllvm -polly-scheduling-chunksize=1")
+		ltoCOnlyFlags = append(ltoCOnlyFlags, "-mllvm -polly-vectorizer=stripmine")
 
 		if ctx.Config().IsEnvTrue("USE_THINLTO_CACHE") {
 			// Set appropriate ThinLTO cache policy
@@ -165,6 +180,7 @@ func (lto *lto) flags(ctx BaseModuleContext, flags Flags) Flags {
 		flags.Local.AsFlags = append(flags.Local.AsFlags, ltoCFlags...)
 		flags.Local.LdFlags = append(flags.Local.LdFlags, ltoCFlags...)
 		flags.Local.LdFlags = append(flags.Local.LdFlags, ltoLdFlags...)
+		flags.Local.CFlags = append(flags.Local.CFlags, ltoCOnlyFlags...)
 	}
 	return flags
 }
