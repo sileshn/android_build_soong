@@ -119,10 +119,10 @@ func (lto *lto) flags(ctx BaseModuleContext, flags Flags) Flags {
 		// Apply the same for Eng builds as well.
 		if !lto.ThinLTO() || ctx.Config().Eng() {
 			ltoLdFlags = append(ltoLdFlags, "-Wl,--lto-O0")
-		}
-
-		if Bool(lto.Properties.Whole_program_vtables) {
-			ltoCFlags = append(ltoCFlags, "-fwhole-program-vtables")
+		} else {
+		    ltoCFlags = append(ltoCFlags, "-fwhole-program-vtables")
+		    ltoCFlags = append(ltoCFlags, "-O3")
+		    ltoLdFlags = append(ltoLdFlags,"-Wl,--lto-O3")
 		}
 
 		if ctx.Config().IsEnvTrue("USE_THINLTO_CACHE") {
