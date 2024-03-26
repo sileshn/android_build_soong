@@ -143,6 +143,7 @@ func (lto *lto) flags(ctx BaseModuleContext, flags Flags) Flags {
 		if !ctx.Darwin() {
 			if ctx.isAfdoCompile() {
 				ltoLdFlags = append(ltoLdFlags, "-Wl,-plugin-opt,-import-instr-limit=40")
+				ltoLdFlags = append(ltoLdFlags, "-Wl,-plugin-opt=O3")
 			} else {
 				ltoLdFlags = append(ltoLdFlags, "-Wl,-plugin-opt,-import-instr-limit=5")
 			}
