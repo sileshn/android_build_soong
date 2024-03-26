@@ -161,6 +161,19 @@ func (lto *lto) flags(ctx BaseModuleContext, flags Flags) Flags {
 			}
 		}
 
+		additionalLdFlags := []string{
+			"-Wl,-mllvm,-inline-threshold=600",
+			"-Wl,-mllvm,-inlinehint-threshold=550",
+			"-Wl,-mllvm,-unroll-threshold=800",
+			"-Wl,-mllvm,-polly",
+			"-Wl,-mllvm,-polly-ast-use-context",
+			"-Wl,-mllvm,-polly-invariant-load-hoisting",
+			"-Wl,-mllvm,-polly-vectorizer=stripmine",
+			"-Wl,-mllvm,-polly-loopfusion-greedy=1",
+			"-Wl,-mllvm,-polly-scheduling-chunksize=1",
+		}
+
+		flags.Local.LdFlags = append(flags.Local.LdFlags, additionalLdFlags...)
 		flags.Local.CFlags = append(flags.Local.CFlags, ltoCFlags...)
 		flags.Local.AsFlags = append(flags.Local.AsFlags, ltoCFlags...)
 		flags.Local.LdFlags = append(flags.Local.LdFlags, ltoCFlags...)
