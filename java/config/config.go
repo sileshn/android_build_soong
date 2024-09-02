@@ -87,7 +87,7 @@ func init() {
 	// D8 invocations are shorter lived, so we restrict their JIT tiering relative to R8.
 	// Note that the `-JXX` prefix syntax is specific to the R8/D8 invocation wrappers.
 	pctx.StaticVariable("D8Flags", strings.Join(append([]string{
-		"-JXmx4096M",
+		"-JXmx8192M",
 		"-JXX:+TieredCompilation",
 		"-JXX:TieredStopAtLevel=1",
 		"-JDcom.android.tools.r8.emitRecordAnnotationsInDex",
@@ -96,7 +96,7 @@ func init() {
 
 	pctx.VariableFunc("R8Flags", func(ctx android.PackageVarContext) string {
 		r8flags := append([]string{
-			"-JXmx4096M",
+			"-JXmx8192M",
 			"-JDcom.android.tools.r8.emitRecordAnnotationsInDex",
 			"-JDcom.android.tools.r8.emitPermittedSubclassesAnnotationsInDex",
 		}, dexerJavaVmFlagsList...)
