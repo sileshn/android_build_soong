@@ -375,8 +375,6 @@ def append_additional_system_props(args):
     # Disallow mock locations by default for user builds
     props.append("ro.allow.mock.location=0")
   else:
-    # Turn on checkjni for non-user builds.
-    props.append("ro.kernel.android.checkjni=1")
     # Set device insecure for non-user builds.
     props.append("ro.secure=0")
     # Allow mock locations by default for non user builds
