@@ -380,10 +380,6 @@ def append_additional_system_props(args):
     # Allow mock locations by default for non user builds
     props.append("ro.allow.mock.location=1")
 
-  if enable_dalvik_lock_contention_logging:
-    # Enable Dalvik lock contention logging.
-    props.append("dalvik.vm.lockprof.threshold=500")
-
   if enable_target_debugging:
     # Target is more debuggable and adbd is on by default
     props.append("ro.debuggable=1")
