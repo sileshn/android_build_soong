@@ -22,6 +22,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -314,6 +315,13 @@ func parseAvailableEnv() map[string]string {
 }
 
 func main() {
+	// Build-action generation keeps a large live heap.  Start collection before
+	// the default 100% heap-growth target to avoid an avoidable RSS spike on
+	// memory-constrained workstations.  An explicitly forwarded GOGC still wins.
+	if os.Getenv("GOGC") == "" {
+		debug.SetGCPercent(50)
+	}
+
 	flag.Parse()
 
 	if cmdlineArgs.Memprofile == "" {

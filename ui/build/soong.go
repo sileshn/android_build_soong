@@ -231,6 +231,15 @@ func (pb PrimaryBuilderFactory) primaryBuilderInvocation(config Config) bootstra
 		invocationEnv["GODEBUG"] = "asyncpreemptoff=1"
 	}
 
+	// soong_build is launched by Ninja, whose regular action environment is
+	// filtered.  Forward Go memory tuning explicitly so users can tune analysis
+	// without enabling ALLOW_NINJA_ENV for the whole build.
+	for _, name := range []string{"GOGC", "GOMEMLIMIT"} {
+		if value := os.Getenv(name); value != "" {
+			invocationEnv[name] = value
+		}
+	}
+
 	var allArgs []string
 	allArgs = append(allArgs, pb.specificArgs...)
 
